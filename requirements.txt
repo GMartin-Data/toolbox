@@ -1,4 +1,5 @@
 pandas
+scikit-learn
 scipy
 seaborn
 transformers
