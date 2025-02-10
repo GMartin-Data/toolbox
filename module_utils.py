@@ -3,6 +3,40 @@ import subprocess
 import sys
 
 
+def check_package_health(package_name):
+    """
+    Comprehensive package health check using pkg_resources
+    """
+    try:
+        # Get the distribution
+        dist = pkg_resources.get_distribution(package_name)
+
+        print(f"Package Information for {package_name}:")
+        print(f"Version: {dist.version}")
+        print(f"Location: {dist.location}")
+
+        # Check dependencies
+        print("\nDependencies:")
+        for req in dist.requires():
+            try:
+                dep_dist = pkg_resources.get_distribution(req.project_name)
+                print(f"✓ {req.project_name} {dep_dist.version}")
+            except pkg_resources.DistributionNotFound:
+                print(f"✗ Missing: {req.project_name}")
+
+        # Check for any available resources
+        print("\nAvailable Resources:")
+        try:
+            resources = pkg_resources.resource_listdir(package_name, "")
+            for resource in resources:
+                print(f"- {resource}")
+        except (pkg_resources.ResourceManager.ResourceError, TypeError):
+            print("No resources found")
+
+    except pkg_resources.DistributionNotFound:
+        print(f"Package {package_name} is not installed")
+
+
 def install_if_missing(package: str) -> None:
     """
     Check an environment, to see if a given package is installed.
