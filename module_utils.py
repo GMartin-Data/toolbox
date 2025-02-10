@@ -205,3 +205,34 @@ def install_requirements(
         package: install_if_missing(package, upgrade=upgrade)
         for package in requirements
     }
+
+
+def is_package_name_valid(package_name: str) -> bool:
+    """
+    Check if a package name follows PEP 508 naming conventions.
+    
+    A valid package name can only contain letters, numbers, dot (.), 
+    underscore (_) and hyphen (-), and must start and end with a letter or number.
+    
+    Parameters
+    ----------
+    package_name : str
+        The package name to validate
+        
+    Returns
+    -------
+    bool
+        True if the package name meets PEP 508 requirements, False otherwise
+        
+    Examples
+    --------
+    >>> is_package_name_valid("requests")
+    True
+    >>> is_package_name_valid("numpy-1.19")
+    True
+    >>> is_package_name_valid("-invalid")
+    False
+    """
+    import re
+    pattern = r'^([A-Z0-9]|[A-Z0-9][A-Z0-9._-]*[A-Z0-9])$'
+    return bool(re.match(pattern, package_name, re.IGNORECASE))
