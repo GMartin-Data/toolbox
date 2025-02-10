@@ -195,7 +195,11 @@ def install_requirements(
             Whether to upgrade existing packages
 
     Returns:
-        dict[str, Optional[str]]: Mapping of package names to their installed versions
+        dict[str, str | None]: 
+            A dictionary mapping package names to their installed versions.
+            Values are either:
+            - str: The version string if installation succeeded
+            - None: If installation failed
     """
     return {
         package: install_if_missing(package, upgrade=upgrade)
